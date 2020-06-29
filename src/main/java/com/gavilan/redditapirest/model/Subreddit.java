@@ -29,10 +29,9 @@ public class Subreddit {
     @NotBlank(message = "Description is required")
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subreddit")
     private List<Post> posts;
 
-    @Column(name = "created_date")
     private Instant createdDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

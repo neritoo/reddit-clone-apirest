@@ -25,6 +25,5 @@ public class VerificationToken {
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @Column(name = "expiry_date")
     private Instant expiryDate;
 }
