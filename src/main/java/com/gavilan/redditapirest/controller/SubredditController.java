@@ -1,10 +1,10 @@
 package com.gavilan.redditapirest.controller;
 
 import com.gavilan.redditapirest.dto.SubredditDto;
+import com.gavilan.redditapirest.exception.SpringRedditException;
 import com.gavilan.redditapirest.service.SubredditService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,10 +41,10 @@ public class SubredditController {
 
             subreddit = subredditService.getSubreddit(id);
 
-        } catch (DataAccessException e) {
+        } catch (SpringRedditException e) {
 
             response.put("message", "Error executing query in the database");
-            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
