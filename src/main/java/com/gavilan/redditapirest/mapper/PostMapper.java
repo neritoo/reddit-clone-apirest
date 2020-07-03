@@ -12,7 +12,6 @@ import org.mapstruct.Mapping;
 public interface PostMapper {
 
     @Mapping(target = "createdDate", expression = "java(java.time.Instant.now())")
-    // Cuando target y source matchean y se reciben como params no hace falta expresarlos.
     @Mapping(target = "subreddit", source = "subreddit")
     @Mapping(target = "user", source = "user")
     @Mapping(target = "description", source = "postRequest.description")

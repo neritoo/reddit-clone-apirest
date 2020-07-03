@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.time.Instant;
+import java.util.Date;
 
 @Data
 @Entity
@@ -28,7 +28,7 @@ public class Comment {
     @JoinColumn(name = "postId", referencedColumnName = "postId")
     private Post post;
 
-    private Instant createdDate;
+    private Date createdDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
