@@ -64,9 +64,21 @@ public class AuthController {
     }
 
     @PostMapping("/refresh/token")
-    public AuthenticationResponse refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<?> refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
 
-        return authService.refreshToken(refreshTokenRequest);
+        Map<String, Object> response = new HashMap<>();
+        AuthenticationResponse authenticationResponse;
+
+        try {
+
+            authenticationResponse = authService.refreshToken(refreshTokenRequest);
+        } catch (SpringRedditException e) {
+            response.put("message", "Error al refrescar token");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
 
     @PostMapping("/logout")
