@@ -9,9 +9,12 @@ import com.gavilan.redditapirest.repository.CommentRepository;
 import com.gavilan.redditapirest.repository.VoteRepository;
 import com.gavilan.redditapirest.service.AuthService;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
+import com.github.marlonlom.utilities.timeago.TimeAgoMessages;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Locale;
 
 @Mapper(componentModel = "spring")
 public abstract class PostMapper {
@@ -46,7 +49,9 @@ public abstract class PostMapper {
     }
 
     String getDuration(Post post) {
-        return TimeAgo.using(post.getCreatedDate().getTime());
+        Locale LocaleBylanguageTag = Locale.forLanguageTag("es");
+        TimeAgoMessages messages = new TimeAgoMessages.Builder().withLocale(LocaleBylanguageTag).build();
+        return TimeAgo.using(post.getCreatedDate().getTime(), messages);
     }
 
 }
