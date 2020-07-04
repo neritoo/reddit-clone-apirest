@@ -24,9 +24,24 @@ public class CommentsController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<CommentsDto> createComment(@RequestBody CommentsDto commentsDto) {
+    public ResponseEntity<?> createComment(@RequestBody CommentsDto commentsDto) {
 
-        return new ResponseEntity<>(commentService.save(commentsDto), HttpStatus.CREATED);
+        Map<String, Object> response = new HashMap<>();
+        CommentsDto comment;
+
+        try {
+
+            comment = commentService.save(commentsDto);
+        } catch (SpringRedditException e) {
+
+            response.put("message","Error al guardar comentario");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("comment", comment);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/post/{postId}")
@@ -45,7 +60,7 @@ public class CommentsController {
         }
 
         if (comments.size() == 0) {
-            response.put("error", "The post with ID: " + postId + " doesn't have any comments");
+            response.put("error", "El post con Id: " + postId + " no tiene ningún comentario.");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
@@ -55,9 +70,28 @@ public class CommentsController {
     }
 
     @GetMapping("/user/{username}")
-    public ResponseEntity<List<CommentsDto>> getCommentsForUser(@PathVariable String username) {
+    public ResponseEntity<?> getCommentsForUser(@PathVariable String username) {
 
-        return new ResponseEntity<>(commentService.getAllCommentsForUser(username), HttpStatus.OK);
+        Map<String, Object> response = new HashMap<>();
+        List<CommentsDto> comments;
+
+        try {
+
+            comments = commentService.getAllCommentsForUser(username);
+        } catch (SpringRedditException e) {
+            response.put("message", "Error al obtener los comentarios del usuario");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if (comments.size() == 0) {
+            response.put("error", "El usuario " + username + " no tiene ningún comentario." );
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        response.put("comments", comments);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

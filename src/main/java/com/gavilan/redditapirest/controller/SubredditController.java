@@ -22,13 +22,48 @@ public class SubredditController {
     private final SubredditService subredditService;
 
     @PostMapping
-    public ResponseEntity<SubredditDto> createSubreddit(@RequestBody SubredditDto subredditDto) {
-        return new ResponseEntity<>(subredditService.save(subredditDto), HttpStatus.CREATED);
+    public ResponseEntity<?> createSubreddit(@RequestBody SubredditDto subredditDto) {
+
+        Map<String, Object> response = new HashMap<>();
+        SubredditDto subreddit;
+
+        try {
+
+            subreddit = subredditService.save(subredditDto);
+        } catch (SpringRedditException e) {
+            response.put("message", "Error al guardar subreddit");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("subreddit", subreddit);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<SubredditDto>> getAllSubreddits() {
-        return new ResponseEntity<>(subredditService.getAll(), HttpStatus.OK);
+    public ResponseEntity<?> getAllSubreddits() {
+
+        Map<String, Object> response = new HashMap<>();
+        List<SubredditDto> subreddits;
+
+        try {
+
+            subreddits = subredditService.getAll();
+        } catch (SpringRedditException e) {
+            response.put("message", "Error al obtener subreddits del servidor");
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if (subreddits.size() == 0) {
+            response.put("error", "No existen subreddits en la base de datos");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        response.put("subreddits", subreddits);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

@@ -10,6 +10,7 @@ import com.gavilan.redditapirest.repository.VoteRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -28,6 +29,7 @@ public class VoteService {
     private final PostRepository postRepository;
     private final AuthService authService;
 
+    @Transactional
     public void vote(VoteDto voteDto) {
 
         Post post = postRepository.findById(voteDto.getPostId())
