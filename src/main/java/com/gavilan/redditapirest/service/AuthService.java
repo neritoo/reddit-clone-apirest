@@ -2,6 +2,7 @@ package com.gavilan.redditapirest.service;
 
 import com.gavilan.redditapirest.dto.AuthenticationResponse;
 import com.gavilan.redditapirest.dto.LoginRequest;
+import com.gavilan.redditapirest.dto.RefreshTokenRequest;
 import com.gavilan.redditapirest.dto.RegisterRequest;
 import com.gavilan.redditapirest.exception.SpringRedditException;
 import com.gavilan.redditapirest.model.NotificationEmail;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,6 +36,7 @@ public class AuthService {
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
+    private final RefreshTokenService refreshTokenService;
 
     @Transactional
     public void signup(RegisterRequest registerRequest) {
@@ -91,7 +94,12 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtProvider.generateToken(authenticate);
 
-        return new AuthenticationResponse(token, loginRequest.getUsername());
+        return AuthenticationResponse.builder()
+                .authenticationToken(token)
+                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
+                .expiresAt(new Date(new Date().getTime() + jwtProvider.getJwtExpirationInMillis()))
+                .username(loginRequest.getUsername())
+                .build();
     }
 
     public User getCurrentUser() {
@@ -101,5 +109,19 @@ public class AuthService {
         return userRepository.findByUsername(principal.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " +
                         principal.getUsername()));
+    }
+
+    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+
+        refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
+
+        String token = jwtProvider.generateTokenWithUsername(refreshTokenRequest.getUsername());
+
+        return AuthenticationResponse.builder()
+                .authenticationToken(token)
+                .refreshToken(refreshTokenRequest.getRefreshToken())
+                .username(refreshTokenRequest.getUsername())
+                .expiresAt(new Date(new Date().getTime() + jwtProvider.getJwtExpirationInMillis()))
+                .build();
     }
 }

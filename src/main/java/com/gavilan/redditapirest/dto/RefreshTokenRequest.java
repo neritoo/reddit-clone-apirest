@@ -5,16 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import javax.validation.constraints.NotBlank;
+
+/**
+ * @author: Eze Gavilán
+ **/
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AuthenticationResponse {
+public class RefreshTokenRequest {
 
-    private String authenticationToken;
-    private String username;
+    @NotBlank
     private String refreshToken;
-    private Date expiresAt;
+    private String username;
 }

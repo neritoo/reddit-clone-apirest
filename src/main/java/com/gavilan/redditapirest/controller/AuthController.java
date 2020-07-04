@@ -2,14 +2,17 @@ package com.gavilan.redditapirest.controller;
 
 import com.gavilan.redditapirest.dto.AuthenticationResponse;
 import com.gavilan.redditapirest.dto.LoginRequest;
+import com.gavilan.redditapirest.dto.RefreshTokenRequest;
 import com.gavilan.redditapirest.dto.RegisterRequest;
 import com.gavilan.redditapirest.exception.SpringRedditException;
 import com.gavilan.redditapirest.service.AuthService;
+import com.gavilan.redditapirest.service.RefreshTokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +22,7 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthService authService;
+    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody RegisterRequest registerRequest) {
@@ -57,5 +61,18 @@ public class AuthController {
     public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
 
         return authService.login(loginRequest);
+    }
+
+    @PostMapping("/refresh/token")
+    public AuthenticationResponse refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+
+        return authService.refreshToken(refreshTokenRequest);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
+
+        return new ResponseEntity<>("Refresh token eliminado con éxito.", HttpStatus.OK);
     }
 }
