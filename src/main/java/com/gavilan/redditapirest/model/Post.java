@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.time.Instant;
+import java.util.Date;
 
 @Data
 @Entity
@@ -37,7 +37,7 @@ public class Post {
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
 
-    private Instant createdDate;
+    private Date createdDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "id", referencedColumnName = "id")

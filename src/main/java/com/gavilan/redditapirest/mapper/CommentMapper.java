@@ -4,6 +4,7 @@ import com.gavilan.redditapirest.dto.CommentsDto;
 import com.gavilan.redditapirest.model.Comment;
 import com.gavilan.redditapirest.model.Post;
 import com.gavilan.redditapirest.model.User;
+import com.github.marlonlom.utilities.timeago.TimeAgo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -19,8 +20,11 @@ public interface CommentMapper {
 
     @Mapping(target = "postId", expression = "java(comment.getPost().getPostId())")
     @Mapping(target = "username", expression = "java(comment.getUser().getUsername())")
-    @Mapping(target = "createdDate", expression = "java(comment.getCreatedDate())")
+    @Mapping(target = "duration", expression = "java(getDuration(comment))")
     CommentsDto mapToDto(Comment comment);
 
+    default String getDuration(Comment comment) {
+        return TimeAgo.using(comment.getCreatedDate().getTime());
+    }
 
 }

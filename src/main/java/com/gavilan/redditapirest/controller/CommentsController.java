@@ -5,10 +5,9 @@ import com.gavilan.redditapirest.service.CommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author: Eze Gavilán
@@ -25,6 +24,18 @@ public class CommentsController {
     public ResponseEntity<CommentsDto> createComment(@RequestBody CommentsDto commentsDto) {
 
         return new ResponseEntity<>(commentService.save(commentsDto), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<List<CommentsDto>> getCommentsForPost(@PathVariable Long postId) {
+
+        return new ResponseEntity<>(commentService.getAllCommentsForPost(postId), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{username}")
+    public ResponseEntity<List<CommentsDto>> getCommentsForUser(@PathVariable String username) {
+
+        return new ResponseEntity<>(commentService.getAllCommentsForUser(username), HttpStatus.OK);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.gavilan.redditapirest.dto;
 
+import com.gavilan.redditapirest.model.VoteType;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,12 +12,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class CommentsDto {
+public class VoteDto {
 
-    private Long id;
+    private VoteType voteType;
     private Long postId;
-    private String duration;
-    private String text;
-    private String username;
 }
