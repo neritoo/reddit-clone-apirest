@@ -5,8 +5,11 @@ import com.gavilan.redditapirest.model.Comment;
 import com.gavilan.redditapirest.model.Post;
 import com.gavilan.redditapirest.model.User;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
+import com.github.marlonlom.utilities.timeago.TimeAgoMessages;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.Locale;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
@@ -24,7 +27,10 @@ public interface CommentMapper {
     CommentsDto mapToDto(Comment comment);
 
     default String getDuration(Comment comment) {
-        return TimeAgo.using(comment.getCreatedDate().getTime());
+        Locale LocaleBylanguageTag = Locale.forLanguageTag("es");
+        TimeAgoMessages messages = new TimeAgoMessages.Builder().withLocale(LocaleBylanguageTag).build();
+
+        return TimeAgo.using(comment.getCreatedDate().getTime(), messages);
     }
 
 }
