@@ -2,16 +2,13 @@ package com.gavilan.redditapirest.controller;
 
 import com.gavilan.redditapirest.dto.PostRequest;
 import com.gavilan.redditapirest.dto.PostResponse;
-import com.gavilan.redditapirest.exception.SpringRedditException;
 import com.gavilan.redditapirest.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author: Eze Gavilán
@@ -25,8 +22,9 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<?> createPost(@RequestBody PostRequest postRequest) {
+    public ResponseEntity<PostResponse> createPost(@RequestBody PostRequest postRequest) {
 
+        /*
         Map<String, Object> response = new HashMap<>();
         PostResponse postResponse;
 
@@ -41,12 +39,15 @@ public class PostController {
 
         response.put("post", postResponse);
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+         */
+
+        return new ResponseEntity<>(postService.save(postRequest), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllPosts() {
+    public ResponseEntity<List<PostResponse>> getAllPosts() {
 
+        /*
         Map<String, Object> response = new HashMap<>();
         List<PostResponse> posts;
 
@@ -66,12 +67,15 @@ public class PostController {
 
         response.put("posts", posts);
 
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+         */
+
+        return new ResponseEntity<>(postService.getAllPosts(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPost(@PathVariable Long id) {
+    public ResponseEntity<PostResponse> getPost(@PathVariable Long id) {
 
+        /*
         Map<String, Object> response = new HashMap<>();
         PostResponse postResponse;
 
@@ -86,12 +90,15 @@ public class PostController {
 
         response.put("post", postResponse);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+         */
+
+        return new ResponseEntity<>(postService.getPost(id), HttpStatus.OK);
     }
 
     @GetMapping("subreddit/{id}")
-    public ResponseEntity<?> getPostsBySubreddit(@PathVariable Long id) {
+    public ResponseEntity<List<PostResponse>> getPostsBySubreddit(@PathVariable Long id) {
 
+        /*
         Map<String, Object> response = new HashMap<>();
         List<PostResponse> posts;
 
@@ -111,12 +118,15 @@ public class PostController {
 
         response.put("posts", posts);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+         */
+
+        return new ResponseEntity<>(postService.getPostsBySubreddit(id), HttpStatus.OK);
     }
 
     @GetMapping("username/{name}")
-    public ResponseEntity<?> getPostsByUsername(@PathVariable String name) {
+    public ResponseEntity<List<PostResponse>> getPostsByUsername(@PathVariable String name) {
 
+        /*
         Map<String, Object> response = new HashMap<>();
         List<PostResponse> posts;
 
@@ -131,6 +141,8 @@ public class PostController {
 
         response.put("posts", posts);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+         */
+
+        return new ResponseEntity<>(postService.getPostsByUsername(name), HttpStatus.OK);
     }
 }

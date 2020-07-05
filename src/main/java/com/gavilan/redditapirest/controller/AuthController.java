@@ -4,7 +4,6 @@ import com.gavilan.redditapirest.dto.AuthenticationResponse;
 import com.gavilan.redditapirest.dto.LoginRequest;
 import com.gavilan.redditapirest.dto.RefreshTokenRequest;
 import com.gavilan.redditapirest.dto.RegisterRequest;
-import com.gavilan.redditapirest.exception.SpringRedditException;
 import com.gavilan.redditapirest.service.AuthService;
 import com.gavilan.redditapirest.service.RefreshTokenService;
 import lombok.AllArgsConstructor;
@@ -13,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -25,8 +22,9 @@ public class AuthController {
     private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
 
+        /*
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -38,12 +36,14 @@ public class AuthController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+         */
+
         return new ResponseEntity<>("Registración de usuario exitosa", HttpStatus.OK);
     }
 
     @GetMapping("/accountVerification/{token}")
-    public ResponseEntity<?> verifyToken(@PathVariable String token) {
-
+    public ResponseEntity<String> verifyToken(@PathVariable String token) {
+        /*
         Map<String, Object> response = new HashMap<>();
         try {
 
@@ -53,6 +53,8 @@ public class AuthController {
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+         */
 
         return new ResponseEntity<>("Account Activated Successfully", HttpStatus.OK);
     }
@@ -64,8 +66,9 @@ public class AuthController {
     }
 
     @PostMapping("/refresh/token")
-    public ResponseEntity<?> refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<AuthenticationResponse> refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
 
+        /*
         Map<String, Object> response = new HashMap<>();
         AuthenticationResponse authenticationResponse;
 
@@ -78,7 +81,9 @@ public class AuthController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
+         */
+
+        return new ResponseEntity<>(authService.refreshToken(refreshTokenRequest), HttpStatus.OK);
     }
 
     @PostMapping("/logout")

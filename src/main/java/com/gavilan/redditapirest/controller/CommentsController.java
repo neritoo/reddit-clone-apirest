@@ -1,16 +1,13 @@
 package com.gavilan.redditapirest.controller;
 
 import com.gavilan.redditapirest.dto.CommentsDto;
-import com.gavilan.redditapirest.exception.SpringRedditException;
 import com.gavilan.redditapirest.service.CommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author: Eze Gavilán
@@ -24,8 +21,9 @@ public class CommentsController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<?> createComment(@RequestBody CommentsDto commentsDto) {
+    public ResponseEntity<CommentsDto> createComment(@RequestBody CommentsDto commentsDto) {
 
+        /*
         Map<String, Object> response = new HashMap<>();
         CommentsDto comment;
 
@@ -41,12 +39,15 @@ public class CommentsController {
 
         response.put("comment", comment);
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+         */
+
+        return new ResponseEntity<>(commentService.save(commentsDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<?> getCommentsForPost(@PathVariable Long postId) {
+    public ResponseEntity<List<CommentsDto>> getCommentsForPost(@PathVariable Long postId) {
 
+        /*
         Map<String, Object> response = new HashMap<>();
         List<CommentsDto> comments;
 
@@ -66,12 +67,15 @@ public class CommentsController {
 
         response.put("comments", comments);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+         */
+
+        return new ResponseEntity<>(commentService.getAllCommentsForPost(postId), HttpStatus.OK);
     }
 
     @GetMapping("/user/{username}")
-    public ResponseEntity<?> getCommentsForUser(@PathVariable String username) {
+    public ResponseEntity<List<CommentsDto>> getCommentsForUser(@PathVariable String username) {
 
+        /*
         Map<String, Object> response = new HashMap<>();
         List<CommentsDto> comments;
 
@@ -91,7 +95,9 @@ public class CommentsController {
 
         response.put("comments", comments);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+         */
+
+        return new ResponseEntity<>(commentService.getAllCommentsForUser(username), HttpStatus.OK);
     }
 
 }

@@ -1,7 +1,6 @@
 package com.gavilan.redditapirest.controller;
 
 import com.gavilan.redditapirest.dto.SubredditDto;
-import com.gavilan.redditapirest.exception.SpringRedditException;
 import com.gavilan.redditapirest.service.SubredditService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,9 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/subreddit")
@@ -22,8 +19,9 @@ public class SubredditController {
     private final SubredditService subredditService;
 
     @PostMapping
-    public ResponseEntity<?> createSubreddit(@RequestBody SubredditDto subredditDto) {
+    public ResponseEntity<SubredditDto> createSubreddit(@RequestBody SubredditDto subredditDto) {
 
+        /*
         Map<String, Object> response = new HashMap<>();
         SubredditDto subreddit;
 
@@ -38,12 +36,15 @@ public class SubredditController {
 
         response.put("subreddit", subreddit);
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+         */
+
+        return new ResponseEntity<>(subredditService.save(subredditDto), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllSubreddits() {
+    public ResponseEntity<List<SubredditDto>> getAllSubreddits() {
 
+        /*
         Map<String, Object> response = new HashMap<>();
         List<SubredditDto> subreddits;
 
@@ -63,13 +64,16 @@ public class SubredditController {
 
         response.put("subreddits", subreddits);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+         */
+
+        return new ResponseEntity<>(subredditService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getSubreddit(@PathVariable Long id) {
-        Map<String, Object> response = new HashMap<>();
+    public ResponseEntity<SubredditDto> getSubreddit(@PathVariable Long id) {
 
+        /*
+        Map<String, Object> response = new HashMap<>();
         SubredditDto subreddit;
 
         try {
@@ -84,7 +88,10 @@ public class SubredditController {
         }
 
         response.put("subreddit", subreddit);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+         */
+
+        return new ResponseEntity<>(subredditService.getSubreddit(id), HttpStatus.OK);
     }
 
 }
