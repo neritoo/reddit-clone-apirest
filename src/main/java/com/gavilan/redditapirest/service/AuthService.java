@@ -53,7 +53,7 @@ public class AuthService {
         mailService.sendMail(new NotificationEmail("Porfavor, active su cuenta.",
                 user.getEmail(), "Gracias por registrarse a reddit clone! Porfavor, haga click en" +
                 " el url de aqui abajo para activar su cuenta: " +
-                "http://localhost:8080/api/auth/accountVerification/" + token));
+                "\nhttps://reddit-clone-apirest.herokuapp.com/api/auth/accountVerification/" + token));
 
     }
 
