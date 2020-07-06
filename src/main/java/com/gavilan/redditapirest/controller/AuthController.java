@@ -38,6 +38,8 @@ public class AuthController {
 
          */
 
+        authService.signup(registerRequest);
+
         return new ResponseEntity<>("Registración de usuario exitosa", HttpStatus.OK);
     }
 
