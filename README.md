@@ -1,7 +1,7 @@
 # Reddit Clone App
 API Rest para Reddit Clone App
 
-## Release VERSIÓN 1.1.1
+## Release VERSIÓN 1.1.0
 
 VERSIÓN de pruducción corriendo en: https://redit-clone-apirest.herokuapp.com
 
