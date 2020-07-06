@@ -11,5 +11,5 @@ Para ver la documentación de las distinas API's ingresar a :
 
 http://localhost:8080/swagger-ui.html
 
-https://reddit-clone-apirest.herokuapp.com
+https://reddit-clone-apirest.herokuapp.com/swagger-ui.html
 
