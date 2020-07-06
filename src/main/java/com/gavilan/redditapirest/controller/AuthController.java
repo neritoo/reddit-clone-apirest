@@ -58,6 +58,8 @@ public class AuthController {
 
          */
 
+        authService.verifyAccount(token);
+
         return new ResponseEntity<>("Account Activated Successfully", HttpStatus.OK);
     }
 
