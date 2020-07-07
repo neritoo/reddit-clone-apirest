@@ -38,6 +38,8 @@ public class VoteController {
 
          */
 
+        voteService.vote(voteDto);
+
         return new ResponseEntity<>("Voto guardado correctamente",HttpStatus.OK);
     }
 }
