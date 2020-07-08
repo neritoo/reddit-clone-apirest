@@ -2,9 +2,7 @@ package com.gavilan.redditapirest.mapper;
 
 import com.gavilan.redditapirest.dto.PostRequest;
 import com.gavilan.redditapirest.dto.PostResponse;
-import com.gavilan.redditapirest.model.Post;
-import com.gavilan.redditapirest.model.Subreddit;
-import com.gavilan.redditapirest.model.User;
+import com.gavilan.redditapirest.model.*;
 import com.gavilan.redditapirest.repository.CommentRepository;
 import com.gavilan.redditapirest.repository.VoteRepository;
 import com.gavilan.redditapirest.service.AuthService;
@@ -15,6 +13,10 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Locale;
+import java.util.Optional;
+
+import static com.gavilan.redditapirest.model.VoteType.DOWNVOTE;
+import static com.gavilan.redditapirest.model.VoteType.UPVOTE;
 
 @Mapper(componentModel = "spring")
 public abstract class PostMapper {
@@ -42,6 +44,8 @@ public abstract class PostMapper {
     @Mapping(target = "commentCount", expression = "java(commentCount(post))")
     @Mapping(target = "duration", expression = "java(getDuration(post))")
     @Mapping(target = "voteCount", source = "voteCount")
+    @Mapping(target = "upVote", expression = "java(isPostUpVoted(post))")
+    @Mapping(target = "downVote", expression = "java(isPostDownVoted(post))")
     public abstract PostResponse mapToDto(Post post);
 
     Integer commentCount(Post post) {
@@ -52,6 +56,25 @@ public abstract class PostMapper {
         Locale LocaleBylanguageTag = Locale.forLanguageTag("es");
         TimeAgoMessages messages = new TimeAgoMessages.Builder().withLocale(LocaleBylanguageTag).build();
         return TimeAgo.using(post.getCreatedDate().getTime(), messages);
+    }
+
+    boolean isPostUpVoted(Post post) {
+        return checkVoteType(post, UPVOTE);
+    }
+
+    boolean isPostDownVoted(Post post) {
+        return checkVoteType(post, DOWNVOTE);
+    }
+
+    private boolean checkVoteType(Post post, VoteType voteType) {
+        if (authService.isLoggedIn()) {
+            Optional<Vote> voteForPostByUser = voteRepository.findTopByPostAndUserOrderByVoteIdDesc(post,
+                    authService.getCurrentUser());
+
+            return voteForPostByUser.filter(vote -> vote.getVoteType().equals(voteType)).isPresent();
+        }
+
+        return false;
     }
 
 }
