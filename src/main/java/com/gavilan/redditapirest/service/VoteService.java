@@ -43,7 +43,7 @@ public class VoteService {
         // Validación: Valida que el mismo usuario no pueda votar de nuevo en el mismo post.
         if (voteByPostAndUser.isPresent() &&
                 voteByPostAndUser.get().getVoteType().equals(voteDto.getVoteType())) {
-            throw new SpringRedditException("You have already " + voteDto.getVoteType() + "'d for this post");
+            throw new SpringRedditException("Ya has dado " + voteDto.getVoteType() + " en éste post");
         }
 
         if (UPVOTE.equals(voteDto.getVoteType())) {

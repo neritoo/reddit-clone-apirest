@@ -39,6 +39,8 @@ public class VoteController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>("Voto guardado correctamente",HttpStatus.OK);
+        response.put("message", "Voto guardado correctamente");
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }
