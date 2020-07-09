@@ -23,8 +23,8 @@ public class  MailService {
     public void sendMail(NotificationEmail notificationEmail) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setFrom("redditclonesender-598aee@inbox.mailtrap.io");
-            // messageHelper.setFrom("gavilanemailsender@gmail.com");
+            // messageHelper.setFrom("redditclonesender-598aee@inbox.mailtrap.io");
+            messageHelper.setFrom("gavilanemailsender@gmail.com");
             messageHelper.setTo(notificationEmail.getRecipient());
             messageHelper.setSubject(notificationEmail.getSubject());
             messageHelper.setText(mailContentBuilder.build(notificationEmail.getBody()), true);
