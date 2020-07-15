@@ -36,4 +36,6 @@ public class User {
     private Date created;
 
     private boolean enabled;
+
+    private String photo;
 }
