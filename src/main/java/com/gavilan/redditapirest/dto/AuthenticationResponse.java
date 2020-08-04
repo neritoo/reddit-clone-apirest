@@ -14,7 +14,9 @@ import java.util.Date;
 public class AuthenticationResponse {
 
     private String authenticationToken;
-    private String username;
     private String refreshToken;
     private Date expiresAt;
+    private String username;
+    private String role;
+    private String email;
 }

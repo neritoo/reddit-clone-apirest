@@ -38,4 +38,8 @@ public class User {
     private boolean enabled;
 
     private String photo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Role role;
 }

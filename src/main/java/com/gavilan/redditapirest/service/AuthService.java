@@ -94,11 +94,20 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtProvider.generateToken(authenticate);
 
+        User user = userRepository.findByUsername(loginRequest.getUsername())
+                .orElseThrow(() -> new SpringRedditException("User not found with name - " + loginRequest.getUsername()));
+
+        if (user.getRole() == null) {
+            throw new SpringRedditException("No Role found");
+        }
+
         return AuthenticationResponse.builder()
                 .authenticationToken(token)
                 .refreshToken(refreshTokenService.generateRefreshToken().getToken())
                 .expiresAt(new Date(new Date().getTime() + jwtProvider.getJwtExpirationInMillis()))
-                .username(loginRequest.getUsername())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole().getRoleName())
                 .build();
     }
 
